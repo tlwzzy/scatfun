@@ -173,12 +173,13 @@ def back0day(name, title):
     pattern = re.compile(pattern, re.I)
     raw_title = re.sub(pattern, '', title)
     raw_title = raw_title.replace('.', ' ').replace('_', ' ').strip()
+    raw_title = re.sub(r'(?<=\d) (?=\d)','.',raw_title)
     return raw_title
 
 
 if __name__ == '__main__':
     pass
-    # a= back0day('Nioh 2 – The Complete Edition','Nioh.2.Complete.Edition.Update.v1.27.00-CODEX')
+    # a = back0day('The Sealed Ampoule',' The Sealed Ampoule x64 v1.00')
     # print(a)
     # a = requests.get('https://store.steampowered.com/api/appdetails?l=schinese&appids=1307550').json()['1307550']['data']['about_the_game']
     # a = html2bb2(a)

@@ -78,7 +78,8 @@ def steam_api(game):
     for genre in gameinfo['genres']:
         genres += '{},'.format(genre['description'])
     screens = ''
-    for screen in gameinfo2['screenshot'][:3]:
+    for screen in gameinfo['screenshot'][:3]:
+        screen = screen['path_thumbnail'].split('?')[0]
         screens += '[img]{}[/img]\n'.format(screen)
     screens = "[center][b][u]游戏截图[/u][/b][/center]\n" + "[center]" + screens + "[/center]"
     try:
@@ -89,7 +90,7 @@ def steam_api(game):
     name = gameinfo['name']
     recfield = "\n\n[center][b][u]配置要求[/u][/b][/center]\n\n [quote]\n{}[/quote]".format(gameinfo2['sysreq'][0])
     cover = "[center][img]" + gameinfo["header_image"].split("?")[0] + "[/img][/center]\n"
-    about = re.sub(r'\[img].+?\[/img]', '', gameinfo2['descr'])
+    about = gameinfo['about_the_game'] if gameinfo['about_the_game'] != '' else gameinfo['detailed_description']
     about = "{}[center][b][u]关于游戏[/u][/b][/center]\n [b]发行日期[/b]：${}\n\n[b]商店链接[/b]：${}\n\n[b]游戏标签[/b]：${}\n\n{}".format(
         cover, date, store, genres, about)
     about += recfield + trailer + screens
@@ -148,10 +149,10 @@ def epic_api(game):
 
 def indie_nova_aip(game_url):
     if 'http' not in game_url:
-        game_url = 'https://indienova.com/game/'+game_url
+        game_url = 'https://indienova.com/game/' + game_url
     api_url = 'https://api.rhilip.info/tool/movieinfo/gen'
     game_info = requests.get(api_url, params={'url': game_url}).json()
-    cover = game_info['cover']
+    cover = "[center][img]" + game_info['cover'] + "[/img][/center]"
     date = game_info['release_date']
     year = date.split('-')[0]
     store = game_url
@@ -160,9 +161,13 @@ def indie_nova_aip(game_url):
         genres += '{},'.format(i)
     about = game_info['descr']
     chinese_name = game_info['chinese_title']
+    screenshots = '\n'
+    for screen in game_info['screenshot'][:6]:
+        screenshots += '[img]{}[/img]\n'.format(screen)
     about = "{}[center][b][u]关于游戏[/u][/b][/center]\n [b]发行日期[/b]：${}\n\n[b]相关链接[/b]：${}\n\n[b]游戏标签[/b]：${}\n\n{}".format(
-        cover, date, store, genres, about)
-    return {"chinese_name":chinese_name,'year':year,'about':about}
+        cover, date, store, genres, about + screenshots)
+    return {"chinese_name": chinese_name, 'year': year, 'about': about}
+
 
 def cookie2dict(cookie):
     cookies = dict([l.split("=", 1) for l in cookie.split("; ")])

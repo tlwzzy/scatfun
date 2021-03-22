@@ -92,7 +92,7 @@ def steam_api(game):
     cover = "[center][img]" + gameinfo["header_image"].split("?")[0] + "[/img][/center]\n"
     about = gameinfo['about_the_game'] if gameinfo['about_the_game'] != '' else gameinfo['detailed_description']
     about = "{}[center][b][u]关于游戏[/u][/b][/center]\n [b]发行日期[/b]：${}\n\n[b]商店链接[/b]：${}\n\n[b]游戏标签[/b]：${}\n\n{}".format(
-        cover, date, store, genres, about)
+        cover, date, store, genres, html2bb(about))
     about += recfield + trailer + screens
     return {'name': name, 'year': year, 'about': about}
 

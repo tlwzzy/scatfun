@@ -159,7 +159,7 @@ def indie_nova_aip(game_url):
     genres = ''
     for i in game_info['cat']:
         genres += '{},'.format(i)
-    intro = re.search('【基本信息】.+(?=【游戏简介】)',game_info['format']).group(0).strip()
+    intro = re.search('【基本信息】.+(?=【游戏简介】)',game_info['format'],re.S).group(0).strip()
     about = intro + game_info['descr']
     chinese_name = game_info['chinese_title']
     screenshots = '\n'
@@ -199,7 +199,7 @@ def back0day(name, title):
 
 
 if __name__ == '__main__':
-    pass
+    indie_nova_aip('https://indienova.com/game/moving-out')
     # a = back0day('The Sealed Ampoule',' The Sealed Ampoule x64 v1.00')
     # print(a)
     # a = requests.get('https://store.steampowered.com/api/appdetails?l=schinese&appids=1307550').json()['1307550']['data']['about_the_game']

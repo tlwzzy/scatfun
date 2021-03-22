@@ -51,9 +51,6 @@ def html2bb2(data):
     return bbcode_soup.select_one('#bbcode').text
 
 
-
-
-
 def steam_api(game):
     if 'http' in game:
         game = re.search(r'/app/(\d+)', game).group(1)
@@ -94,7 +91,7 @@ def steam_api(game):
     cover = "[center][img]" + gameinfo["header_image"].split("?")[0] + "[/img][/center]\n"
     about = re.sub(r'\[img].+?\[/img]', '', gameinfo2['descr'])
     about = "{}[center][b][u]关于游戏[/u][/b][/center]\n [b]发行日期[/b]：${}\n\n[b]商店链接[/b]：${}\n\n[b]游戏标签[/b]：${}\n\n{}".format(
-        cover,date, store, genres, about)
+        cover, date, store, genres, about)
     about += recfield + trailer + screens
     return {'name': name, 'year': year, 'about': about}
 
@@ -149,6 +146,22 @@ def epic_api(game):
     return [name + cover + about + recfield + age_rate + screens, game]
 
 
+def indie_nova_aip(game_url):
+    api_url = 'https://api.rhilip.info/tool/movieinfo/gen'
+    game_info = requests.get(api_url, params={'url': game_url}).json()
+    cover = game_info['cover']
+    date = game_info['release_date']
+    year = date.split('-')[0]
+    store = game_url
+    genres = ''
+    for i in game_info['cat']:
+        genres += '{},'.format(i)
+    about = game_info['descr']
+    chinese_name = game_info['chinese_title']
+    about = "{}[center][b][u]关于游戏[/u][/b][/center]\n [b]发行日期[/b]：${}\n\n[b]相关链接[/b]：${}\n\n[b]游戏标签[/b]：${}\n\n{}".format(
+        cover, date, store, genres, about)
+    return {"chinese_name":chinese_name,'year':year,'about':about}
+
 def cookie2dict(cookie):
     cookies = dict([l.split("=", 1) for l in cookie.split("; ")])
     return cookies
@@ -173,7 +186,7 @@ def back0day(name, title):
     pattern = re.compile(pattern, re.I)
     raw_title = re.sub(pattern, '', title)
     raw_title = raw_title.replace('.', ' ').replace('_', ' ').strip()
-    raw_title = re.sub(r'(?<=\d) (?=\d)','.',raw_title)
+    raw_title = re.sub(r'(?<=\d) (?=\d)', '.', raw_title)
     return raw_title
 
 

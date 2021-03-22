@@ -78,7 +78,7 @@ def steam_api(game):
     for genre in gameinfo['genres']:
         genres += '{},'.format(genre['description'])
     screens = ''
-    for screen in gameinfo['screenshot'][:3]:
+    for screen in gameinfo['screenshots'][:3]:
         screen = screen['path_thumbnail'].split('?')[0]
         screens += '[img]{}[/img]\n'.format(screen)
     screens = "[center][b][u]游戏截图[/u][/b][/center]\n" + "[center]" + screens + "[/center]"

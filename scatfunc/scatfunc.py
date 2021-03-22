@@ -159,11 +159,13 @@ def indie_nova_aip(game_url):
     genres = ''
     for i in game_info['cat']:
         genres += '{},'.format(i)
-    about = game_info['descr']
+    intro = re.search('【基本信息】(?=【游戏简介】)',game_info['format']).group(0).strip()
+    about = intro + game_info['descr']
     chinese_name = game_info['chinese_title']
     screenshots = '\n'
     for screen in game_info['screenshot'][:6]:
         screenshots += '[img]{}[/img]\n'.format(screen)
+    screenshots = "[center][b][u]游戏截图[/u][/b][/center]\n" + "[center]" + screenshots + "[/center]"
     about = "{}[center][b][u]关于游戏[/u][/b][/center]\n [b]发行日期[/b]：${}\n\n[b]相关链接[/b]：${}\n\n[b]游戏标签[/b]：${}\n\n{}".format(
         cover, date, store, genres, about + screenshots)
     return {"chinese_name": chinese_name, 'year': year, 'about': about}

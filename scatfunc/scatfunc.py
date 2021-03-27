@@ -18,7 +18,7 @@ def html2bb(data):
     data = re.sub('< *\/ *em *>', "[/i]", data)
     data = re.sub('< *li *>', "[*]", data)
     data = re.sub('< *\/ *li *>', "", data)
-    data = re.sub('< *ul *class=\\*\"bb_ul\\*\" *>', "", data)
+    data = re.sub(r'< *ul *class=\\*\"bb_ul\\*\" *>', "", data)
     data = re.sub('< *\/ *ul *>', "", data)
     data = re.sub('< *h2 *class=\"bb_tag\" *>', "\n[center][u][b]", data)
     data = re.sub('< *h[12] *>', "\n[center][u][b]", data)
@@ -199,7 +199,26 @@ def back0day(name, title):
 
 
 if __name__ == '__main__':
-    indie_nova_aip('https://indienova.com/game/moving-out')
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:87.0) Gecko/20100101 Firefox/87.0',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Language': 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': '1',
+        'Pragma': 'no-cache',
+        'Cache-Control': 'no-cache',
+    }
+
+    params = (
+        ('l', 'schinese'),
+        ('appids', '1034140'),
+    )
+
+    res = requests.get('https://store.steampowered.com/api/appdetails', headers=headers, params=params).json()
+    data = res['1034140']['data']['about_the_game']
+    data = html2bb(data)
+
+    print(data)
     # a = back0day('The Sealed Ampoule',' The Sealed Ampoule x64 v1.00')
     # print(a)
     # a = requests.get('https://store.steampowered.com/api/appdetails?l=schinese&appids=1307550').json()['1307550']['data']['about_the_game']

@@ -2,7 +2,6 @@ import requests
 from bs4 import BeautifulSoup
 import re
 from retrying import retry
-import json
 
 
 def html2bb(data):
@@ -154,7 +153,7 @@ def indie_nova_api(game_url):
     api_url = 'https://api.rhilip.info/tool/movieinfo/gen'
     try:
         game_info = requests.get(api_url, params={'url': game_url}).json()
-    except json.decoder.JSONDecodeError:
+    except:
         api_url = 'https://autofill.scatowl.workers.dev'
         game_info = requests.get(api_url, params={'url': game_url}).json()
     cover = "[center][img]" + game_info['cover'] + "[/img][/center]"

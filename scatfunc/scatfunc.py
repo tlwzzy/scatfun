@@ -151,7 +151,7 @@ def epic_api(game):
 def indie_nova_api(game_url):
     if 'http' not in game_url:
         game_url = 'https://indienova.com/game/' + game_url
-    api_url = 'https://autofill.scatowl.workers.dev'
+    api_url = 'https://api.rhilip.info/tool/movieinfo/gen'
     try:
         game_info = requests.get(api_url, params={'url': game_url}).json()
     except json.decoder.JSONDecodeError:

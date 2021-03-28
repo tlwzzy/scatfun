@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import re
 from retrying import retry
+import json
 
 
 def html2bb(data):
@@ -147,11 +148,15 @@ def epic_api(game):
     return [name + cover + about + recfield + age_rate + screens, game]
 
 
-def indie_nova_aip(game_url):
+def indie_nova_api(game_url):
     if 'http' not in game_url:
         game_url = 'https://indienova.com/game/' + game_url
-    api_url = 'https://api.rhilip.info/tool/movieinfo/gen'
-    game_info = requests.get(api_url, params={'url': game_url}).json()
+    api_url = 'https://autofill.scatowl.workers.dev'
+    try:
+        game_info = requests.get(api_url, params={'url': game_url}).json()
+    except json.decoder.JSONDecodeError:
+        api_url = 'https://autofill.scatowl.workers.dev'
+        game_info = requests.get(api_url, params={'url': game_url}).json()
     cover = "[center][img]" + game_info['cover'] + "[/img][/center]"
     date = game_info['release_date']
     year = date.split('-')[0]
@@ -199,26 +204,27 @@ def back0day(name, title):
 
 
 if __name__ == '__main__':
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:87.0) Gecko/20100101 Firefox/87.0',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-        'Accept-Language': 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
-        'Connection': 'keep-alive',
-        'Upgrade-Insecure-Requests': '1',
-        'Pragma': 'no-cache',
-        'Cache-Control': 'no-cache',
-    }
-
-    params = (
-        ('l', 'schinese'),
-        ('appids', '1034140'),
-    )
-
-    res = requests.get('https://store.steampowered.com/api/appdetails', headers=headers, params=params).json()
-    data = res['1034140']['data']['about_the_game']
-    data = html2bb(data)
-
-    print(data)
+    pass
+    # headers = {
+    #     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:87.0) Gecko/20100101 Firefox/87.0',
+    #     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    #     'Accept-Language': 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+    #     'Connection': 'keep-alive',
+    #     'Upgrade-Insecure-Requests': '1',
+    #     'Pragma': 'no-cache',
+    #     'Cache-Control': 'no-cache',
+    # }
+    #
+    # params = (
+    #     ('l', 'schinese'),
+    #     ('appids', '1034140'),
+    # )
+    #
+    # res = requests.get('https://store.steampowered.com/api/appdetails', headers=headers, params=params).json()
+    # data = res['1034140']['data']['about_the_game']
+    # data = html2bb(data)
+    #
+    # print(data)
     # a = back0day('The Sealed Ampoule',' The Sealed Ampoule x64 v1.00')
     # print(a)
     # a = requests.get('https://store.steampowered.com/api/appdetails?l=schinese&appids=1307550').json()['1307550']['data']['about_the_game']

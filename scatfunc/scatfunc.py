@@ -72,7 +72,7 @@ def steam_api(game):
         'https://api.rhilip.info/tool/movieinfo/gen?url=https://store.steampowered.com/app/{}'.format(game)).json()
     type = gameinfo['type'].upper().replace('GAME', '游戏本体')
     date = gameinfo['release_date']['date']
-    year = re.search(r'\d{4}', date.split("年")[0])
+    year = re.search(r'\d{4}', date.split("年")[0]).group(0)
     store = 'https://store.steampowered.com/app/{}'.format(game)
     genres = ''
     for genre in gameinfo['genres']:

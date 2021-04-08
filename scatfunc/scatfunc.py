@@ -72,7 +72,7 @@ def steam_api(game):
         'https://api.rhilip.info/tool/movieinfo/gen?url=https://store.steampowered.com/app/{}'.format(game)).json()
     type = gameinfo['type'].upper().replace('GAME', '游戏本体')
     date = gameinfo['release_date']['date']
-    year = date.split("年")[0]
+    year = re.search(r'\d{4}', date.split("年")[0])
     store = 'https://store.steampowered.com/app/{}'.format(game)
     genres = ''
     for genre in gameinfo['genres']:
@@ -163,7 +163,7 @@ def indie_nova_api(game_url):
     genres = ''
     for i in game_info['cat']:
         genres += '{},'.format(i)
-    intro = re.search('【基本信息】.+(?=【游戏简介】)',game_info['format'],re.S).group(0).strip()
+    intro = re.search('【基本信息】.+(?=【游戏简介】)', game_info['format'], re.S).group(0).strip()
     about = intro + game_info['descr']
     chinese_name = game_info['chinese_title']
     screenshots = '\n'
